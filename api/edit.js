@@ -82,7 +82,7 @@ module.exports = async (req, res) => {
                     fps: 24,
                     duration: 8,
                     resolution: "1080p",
-                    aspect_ratio: "1:1",
+                    aspect_ratio: "3:4",
                     camera_fixed: false
                 }
             }
@@ -113,4 +113,5 @@ module.exports = async (req, res) => {
         });
     }
 };
+
 

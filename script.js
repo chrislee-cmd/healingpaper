@@ -345,16 +345,47 @@ function showResults(resultData) {
             videoEl.autoplay = true;
             videoEl.loop = true;
             videoEl.style.width = '100%';
+            videoEl.style.aspectRatio = '3 / 4';
             videoEl.style.borderRadius = '15px';
             videoEl.style.marginTop = '20px';
             editedImageEl.parentElement.appendChild(videoEl);
         }
         videoEl.src = resultData.video_url;
         videoEl.style.display = 'block';
+        
+        // Add download button below video
+        let downloadBtn = document.getElementById('downloadVideoBtn');
+        if (!downloadBtn) {
+            downloadBtn = document.createElement('button');
+            downloadBtn.id = 'downloadVideoBtn';
+            downloadBtn.className = 'btn-primary';
+            downloadBtn.style.marginTop = '15px';
+            downloadBtn.style.width = '100%';
+            downloadBtn.innerHTML = '📥 비디오 다운로드';
+            downloadBtn.onclick = () => downloadVideo(resultData.video_url);
+            editedImageEl.parentElement.appendChild(downloadBtn);
+        }
+    }
+
+    // Show clinic cards
+    const clinicOffers = document.querySelector('.clinic-offers');
+    if (clinicOffers) {
+        clinicOffers.style.display = 'block';
     }
 
     resultSection.style.display = 'block';
     resultSection.scrollIntoView({ behavior: 'smooth' });
+}
+
+// Download video
+function downloadVideo(videoUrl) {
+    const link = document.createElement('a');
+    link.href = videoUrl;
+    link.download = `ai-video-${Date.now()}.mp4`;
+    link.target = '_blank';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
 }
 
 // Download result
@@ -419,7 +450,10 @@ function showDebugResult() {
     // Hide other sections
     document.getElementById('uploadSection').style.display = 'none';
     document.getElementById('editSection').style.display = 'none';
-    document.getElementById('loadingSection').style.display = 'none';
+    const loadingSection = document.getElementById('loadingSection');
+    if (loadingSection) {
+        loadingSection.style.display = 'none';
+    }
     
     // Show result section
     const resultSection = document.getElementById('resultSection');
@@ -427,25 +461,50 @@ function showDebugResult() {
     
     // Use placeholder images
     const originalImage = document.getElementById('originalImage');
-    const editedImage = document.getElementById('editedImage');
+    const editedImageEl = document.getElementById('editedImage');
     
     originalImage.src = 'https://via.placeholder.com/400x400/F26E3C/ffffff?text=Original+Image';
+    originalImage.style.display = 'block';
     
-    // Create edited image container with video
-    editedImage.src = 'https://via.placeholder.com/400x400/FF8C5A/ffffff?text=Edited+Image';
+    // Set edited image
+    editedImageEl.src = 'https://via.placeholder.com/400x400/FF8C5A/ffffff?text=Edited+Image';
+    editedImageEl.style.display = 'block';
     
-    // Add video element if not exists
-    let videoContainer = editedImage.parentElement.querySelector('.video-container');
-    if (!videoContainer) {
-        videoContainer = document.createElement('div');
-        videoContainer.style.marginTop = '15px';
-        videoContainer.innerHTML = `
-            <video controls style="width: 100%; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
-                <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
-                Your browser does not support the video tag.
-            </video>
-        `;
-        editedImage.parentElement.appendChild(videoContainer);
+    // Create video element matching the real implementation
+    let videoEl = document.getElementById('editedVideo');
+    if (!videoEl) {
+        videoEl = document.createElement('video');
+        videoEl.id = 'editedVideo';
+        videoEl.controls = true;
+        videoEl.autoplay = true;
+        videoEl.loop = true;
+        videoEl.style.width = '100%';
+        videoEl.style.aspectRatio = '3 / 4';
+        videoEl.style.borderRadius = '15px';
+        videoEl.style.marginTop = '20px';
+        videoEl.style.boxShadow = '0 4px 15px rgba(0,0,0,0.1)';
+        editedImageEl.parentElement.appendChild(videoEl);
+    }
+    videoEl.src = 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4';
+    videoEl.style.display = 'block';
+    
+    // Add download button
+    let downloadBtn = document.getElementById('downloadVideoBtn');
+    if (!downloadBtn) {
+        downloadBtn = document.createElement('button');
+        downloadBtn.id = 'downloadVideoBtn';
+        downloadBtn.className = 'btn-primary';
+        downloadBtn.style.marginTop = '15px';
+        downloadBtn.style.width = '100%';
+        downloadBtn.innerHTML = '📥 비디오 다운로드';
+        downloadBtn.onclick = () => downloadVideo(videoEl.src);
+        editedImageEl.parentElement.appendChild(downloadBtn);
+    }
+    
+    // Show clinic cards
+    const clinicOffers = document.querySelector('.clinic-offers');
+    if (clinicOffers) {
+        clinicOffers.style.display = 'block';
     }
     
     // Scroll to results

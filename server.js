@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 const Replicate = require('replicate');
 require('dotenv').config();
 
@@ -15,6 +16,9 @@ const replicate = new Replicate({
 app.use(cors());
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
+
+// Serve static files (HTML, CSS, JS)
+app.use(express.static(path.join(__dirname)));
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
@@ -57,7 +61,7 @@ app.post('/api/edit', async (req, res) => {
             {
                 input: {
                     size: "2K",
-                    prompt: "Korean celebrity style: large eyes with double eyelids, high nose bridge, V-line face shape.",
+                    prompt: "Korean celebrity style: large eyes with double eyelids, high nose bridge,ok  V-line face shape.",
                     image_input: [image],  // Array of base64 images
                     aspect_ratio: "1:1",
                     enhance_prompt: true
@@ -86,7 +90,7 @@ app.post('/api/edit', async (req, res) => {
                     fps: 24,
                     duration: 8,
                     resolution: "1080p",
-                    aspect_ratio: "1:1",
+                    aspect_ratio: "3:4",
                     camera_fixed: false
                 }
             }
