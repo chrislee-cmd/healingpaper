@@ -2,11 +2,13 @@
 let uploadedImage = null;
 let selectedFeatures = [];
 let editedImageUrl = null;
+let h1ClickCount = 0;
 
 // Initialize the application
 document.addEventListener('DOMContentLoaded', () => {
     initializeUpload();
     initializeFeatureButtons();
+    initializeDebugMode();
 });
 
 // Initialize upload functionality
@@ -390,3 +392,62 @@ function resetUpload() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
+// Debug mode: Click H1 4 times to show result view without API
+function initializeDebugMode() {
+    const h1Element = document.querySelector('h1');
+    let clickTimeout = null;
+    
+    h1Element.addEventListener('click', () => {
+        h1ClickCount++;
+        
+        // Reset counter after 2 seconds of no clicks
+        clearTimeout(clickTimeout);
+        clickTimeout = setTimeout(() => {
+            h1ClickCount = 0;
+        }, 2000);
+        
+        // If clicked 4 times, show debug result
+        if (h1ClickCount === 4) {
+            h1ClickCount = 0;
+            showDebugResult();
+        }
+    });
+}
+
+// Show debug result view with dummy data
+function showDebugResult() {
+    // Hide other sections
+    document.getElementById('uploadSection').style.display = 'none';
+    document.getElementById('editSection').style.display = 'none';
+    document.getElementById('loadingSection').style.display = 'none';
+    
+    // Show result section
+    const resultSection = document.getElementById('resultSection');
+    resultSection.style.display = 'block';
+    
+    // Use placeholder images
+    const originalImage = document.getElementById('originalImage');
+    const editedImage = document.getElementById('editedImage');
+    
+    originalImage.src = 'https://via.placeholder.com/400x400/F26E3C/ffffff?text=Original+Image';
+    
+    // Create edited image container with video
+    editedImage.src = 'https://via.placeholder.com/400x400/FF8C5A/ffffff?text=Edited+Image';
+    
+    // Add video element if not exists
+    let videoContainer = editedImage.parentElement.querySelector('.video-container');
+    if (!videoContainer) {
+        videoContainer = document.createElement('div');
+        videoContainer.style.marginTop = '15px';
+        videoContainer.innerHTML = `
+            <video controls style="width: 100%; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+                <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        `;
+        editedImage.parentElement.appendChild(videoContainer);
+    }
+    
+    // Scroll to results
+    resultSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
