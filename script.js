@@ -254,7 +254,11 @@ async function simulateAPICall(imageData, prompt) {
         updateProgress(5, '이미지 전송 중...');
         
         // Call the backend server
-        const response = await fetch('http://localhost:3000/api/edit', {
+        const apiUrl = window.location.hostname === 'localhost' 
+            ? 'http://localhost:3000/api/edit'
+            : '/api/edit';
+            
+        const response = await fetch(apiUrl, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

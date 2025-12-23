@@ -179,22 +179,24 @@ app.post('/api/edit-advanced', async (req, res) => {
     }
 });
 
-// Start server
-app.listen(PORT, () => {
-    console.log(`🚀 AI Selfie Editor Backend running on http://localhost:${PORT}`);
-    console.log(`📝 API endpoint: http://localhost:${PORT}/api/edit`);
-    console.log(`🎨 Advanced endpoint: http://localhost:${PORT}/api/edit-advanced`);
-    console.log(`❤️ Health check: http://localhost:${PORT}/api/health`);
-    
-    if (!process.env.REPLICATE_API_TOKEN) {
-        console.warn('⚠️  WARNING: REPLICATE_API_TOKEN not found!');
-        console.warn('   Get your token at: https://replicate.com/account/api-tokens');
-    } else {
-        console.log('✅ Replicate API token configured');
-        console.log('🎬 Unified Replicate pipeline: SeeDream 4 → SeeDance');
-        console.log('📸 Step 1: SeeDream 4 face editing (plastic surgery)');
-        console.log('🎥 Step 2: SeeDance video generation');
-    }
-});
+// Start server (only if not in serverless environment)
+if (process.env.VERCEL !== '1') {
+    app.listen(PORT, () => {
+        console.log(`🚀 AI Selfie Editor Backend running on http://localhost:${PORT}`);
+        console.log(`📝 API endpoint: http://localhost:${PORT}/api/edit`);
+        console.log(`🎨 Advanced endpoint: http://localhost:${PORT}/api/edit-advanced`);
+        console.log(`❤️ Health check: http://localhost:${PORT}/api/health`);
+        
+        if (!process.env.REPLICATE_API_TOKEN) {
+            console.warn('⚠️  WARNING: REPLICATE_API_TOKEN not found!');
+            console.warn('   Get your token at: https://replicate.com/account/api-tokens');
+        } else {
+            console.log('✅ Replicate API token configured');
+            console.log('🎬 Unified Replicate pipeline: SeeDream 4 → SeeDance');
+            console.log('📸 Step 1: SeeDream 4 face editing (plastic surgery)');
+            console.log('🎥 Step 2: SeeDance video generation');
+        }
+    });
+}
 
 module.exports = app;
