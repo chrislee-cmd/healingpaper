@@ -272,19 +272,22 @@ async function simulateAPICall(imageData, prompt) {
             throw new Error(`API error: ${response.status}`);
         }
         
-        // Simulate progress during processing
+        // Simulate progress during processing with more realistic timing
         // Start polling for progress updates
+        let currentProgress = 5;
         const progressInterval = setInterval(() => {
-            const currentProgress = parseInt(document.getElementById('progressBar').style.width);
             if (currentProgress < 85) {
-                const newProgress = Math.min(currentProgress + 2, 85);
-                if (newProgress < 50) {
-                    updateProgress(newProgress, 'SeeDream 얼굴 편집 중...');
+                // Slower increments for more realistic progress
+                const increment = currentProgress < 30 ? 3 : (currentProgress < 60 ? 2 : 1);
+                currentProgress = Math.min(currentProgress + increment, 85);
+                
+                if (currentProgress < 40) {
+                    updateProgress(currentProgress, 'SeeDream 얼굴 편집 중...');
                 } else {
-                    updateProgress(newProgress, 'SeeDance 비디오 생성 중...');
+                    updateProgress(currentProgress, 'SeeDance 비디오 생성 중...');
                 }
             }
-        }, 2000); // Update every 2 seconds
+        }, 3000); // Update every 3 seconds for more realistic pacing
         
         const result = await response.json();
         
@@ -348,6 +351,9 @@ function showResults(resultData) {
             videoEl.style.aspectRatio = '3 / 4';
             videoEl.style.borderRadius = '15px';
             videoEl.style.marginTop = '20px';
+            videoEl.style.transform = 'rotate(0deg)';
+            videoEl.style.objectFit = 'contain';
+            videoEl.setAttribute('playsinline', '');
             editedImageEl.parentElement.appendChild(videoEl);
         }
         videoEl.src = resultData.video_url;
@@ -483,6 +489,9 @@ function showDebugResult() {
         videoEl.style.borderRadius = '15px';
         videoEl.style.marginTop = '20px';
         videoEl.style.boxShadow = '0 4px 15px rgba(0,0,0,0.1)';
+        videoEl.style.transform = 'rotate(0deg)';
+        videoEl.style.objectFit = 'contain';
+        videoEl.setAttribute('playsinline', '');
         editedImageEl.parentElement.appendChild(videoEl);
     }
     videoEl.src = 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4';
