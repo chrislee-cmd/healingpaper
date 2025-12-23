@@ -4,6 +4,11 @@
     "api/*.js": {
       "maxDuration": 60
     }
-  }
+  },
+  "rewrites": [
+    { "source": "/", "destination": "/public/index.html" },
+    { "source": "/script.js", "destination": "/public/script.js" },
+    { "source": "/styles.css", "destination": "/public/styles.css" }
+  ]
 }
 
