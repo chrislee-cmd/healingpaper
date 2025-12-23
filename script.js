@@ -159,9 +159,6 @@ async function generateVideoImmediately() {
     try {
         // Use a default pleasant prompt
         const prompt = "makes natural movements and expressions";
-        
-        // Show thoughts section
-        showThoughts(prompt, ['자동 비디오 생성']);
 
         // Call the backend API
         const editedImage = await simulateAPICall(uploadedImage, prompt);
@@ -200,9 +197,6 @@ async function generateEdit() {
     try {
         // Build prompt based on selected features
         const prompt = buildPrompt(selectedFeatures, customPrompt);
-        
-        // Show thoughts section
-        showThoughts(prompt, selectedFeatures);
 
         // In a real implementation, you would call the Nano Banana API here
         // For now, we'll simulate the API call
@@ -321,38 +315,7 @@ async function simulateAPICall(imageData, prompt) {
     }
 }
 
-// Show thoughts section
-function showThoughts(prompt, features) {
-    const thoughtsSection = document.getElementById('thoughtsSection');
-    const thoughtsText = document.getElementById('thoughtsText');
-    
-    const thoughtsContent = `
-        <strong>Processing Request:</strong><br>
-        Selected features: ${features.join(', ')}<br><br>
-        <strong>Generated Prompt:</strong><br>
-        "${prompt}"<br><br>
-        <strong>Model:</strong> Google Gemini 2.5 Flash (Nano Banana)<br>
-        <strong>Mode:</strong> Image-to-Image with guided editing<br>
-        <strong>Quality:</strong> High (Natural enhancement)
-    `;
-    
-    thoughtsText.innerHTML = thoughtsContent;
-    thoughtsSection.style.display = 'block';
-}
-
-// Toggle thoughts visibility
-function toggleThoughts() {
-    const thoughtsContent = document.getElementById('thoughtsContent');
-    const toggleIcon = document.getElementById('toggleIcon');
-    
-    if (thoughtsContent.style.display === 'none') {
-        thoughtsContent.style.display = 'block';
-        toggleIcon.classList.add('open');
-    } else {
-        thoughtsContent.style.display = 'none';
-        toggleIcon.classList.remove('open');
-    }
-}
+// Thoughts section removed - functionality no longer needed
 
 // Show results with both edited image and video
 function showResults(resultData) {
@@ -415,7 +378,6 @@ function resetUpload() {
     document.getElementById('uploadSection').style.display = 'block';
     document.getElementById('editSection').style.display = 'none';
     document.getElementById('resultSection').style.display = 'none';
-    document.getElementById('thoughtsSection').style.display = 'none';
     document.getElementById('imageInput').value = '';
     document.getElementById('customPrompt').value = '';
 
